@@ -1,0 +1,23 @@
+//
+//  AddHumidityRecordView.swift
+//  coconot_app
+//
+//  Created by lucas mercier on 16/10/2025.
+//
+
+import SwiftUI
+
+struct AddHumidityRecordView: View {
+    
+    let hotHouseId: String
+    
+    var body: some View {
+        Text("AddHumidityRecordView")
+    }
+}
+
+#Preview {
+    AddHumidityRecordView(
+        hotHouseId: "test"
+    )
+}

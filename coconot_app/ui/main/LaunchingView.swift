@@ -34,6 +34,7 @@ struct LaunchingView: View {
         }
         else {
             ContentView()
+            //GeocodingView()
         }
     }
 }

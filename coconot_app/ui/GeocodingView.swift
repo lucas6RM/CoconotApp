@@ -25,7 +25,7 @@ struct GeocodingView: View {
             Button("Obtenir les coordonnées") {
                 Task {
                     let test = try await AppleGeocoder.geocode(address: "17 bd velasquez 13008")
-                
+                    print(test)
                 }
             }
             .buttonStyle(.borderedProminent)

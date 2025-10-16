@@ -6,17 +6,33 @@
 //
 
 import Factory
-import SwiftData
 import Foundation
 
 extension Container {
 
+    
+    var apiService: Factory<ApiService> {
+        self {
+            ApiService()
+        }.singleton
+    }
+    
+    
+    @MainActor
+    var globalRepository: Factory<GlobalRepository> {
+        self {
+            @MainActor in
+            GlobalRepository(apiService: self.apiService())
+        }.singleton
+    }
+    
+    
+    
     @MainActor
     var homeViewModel: Factory<HomeView.ViewModel> {
         self {
             @MainActor in
-            HomeView.ViewModel(
-            )
+            HomeView.ViewModel(globalRepository: self.globalRepository())
         }
     }
     
