@@ -8,7 +8,8 @@
 import Foundation
 
 
-struct DailyReportDto: Codable, Hashable {
+struct DailyReportResponseDto: Codable, Hashable {
+    let id: String
     let hotHouseId: String
     let hotHouseName: String
     let isSubmitted: Bool

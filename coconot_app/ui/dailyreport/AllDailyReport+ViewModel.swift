@@ -18,7 +18,10 @@ extension AllDailyReportView {
         // Fake data pour le preview / test
         private(set) var dailyReportsToday: [DailyReportModel] = [
             DailyReportModel(
+                id: "1",
                 hotHouseId: "1",
+                hotHouseName: "Serre sample 1",
+                isSubmitted: false,
                 temperatureMeasurements: [
                     TemperatureMeasureModel(hotHouseId: "1", temperatureMeasuredInsideHotHouse: 22, temperatureFromWeather: 21, timestamp: .now),
                     TemperatureMeasureModel(hotHouseId: "1", temperatureMeasuredInsideHotHouse: 24, temperatureFromWeather: 23, timestamp: .now)
@@ -29,7 +32,7 @@ extension AllDailyReportView {
                 openedWindowsDurations: [
                     OpenedWindowsDurationModel(hotHouseId: "1", openWindowTime: "8h00", closeWindowTime: "10h00")
                 ],
-                rateOfTheDay: 4,
+                rateOfTheDay: 0,
                 date: .now,
                 predictionOfTheDay: PredictionModel(
                     hotHouseId: "1",
@@ -39,7 +42,10 @@ extension AllDailyReportView {
                 )
             ),
             DailyReportModel(
+                id: "2",
                 hotHouseId: "2",
+                hotHouseName: "Serre sample 2",
+                isSubmitted: true,
                 temperatureMeasurements: [
                     TemperatureMeasureModel(hotHouseId: "2", temperatureMeasuredInsideHotHouse: 18, temperatureFromWeather: 17, timestamp: .now)
                 ],

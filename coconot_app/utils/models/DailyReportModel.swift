@@ -10,8 +10,10 @@ import Foundation
 
 
 struct DailyReportModel : Identifiable {
-    let id = UUID()
+    let id: String
     let hotHouseId : String
+    let hotHouseName : String
+    let isSubmitted : Bool
     let temperatureMeasurements : [TemperatureMeasureModel]
     let humidityMeasurements : [HumidityMeasureModel]
     let openedWindowsDurations : [OpenedWindowsDurationModel]

@@ -11,24 +11,15 @@ import Factory
 struct DailyReportView: View {
     @Environment(\.dismiss) private var dismiss
     
-    
     @State private var vm = Container.shared.dailyReportViewModel()
     
     let report: DailyReportModel
     @State private var userRating: Int = 0
     
+    @State private var showThankYouAlert = false
+    
     var body: some View {
         VStack {
-            
-            HStack {
-                Spacer()
-                Text("Rapport \(report.hotHouseId)")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                Spacer()
-            }
-            .padding(.top)
-            
             Form {
                 // Températures
                 Section("Températures") {
@@ -86,29 +77,34 @@ struct DailyReportView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 4)
                 }
+                
+                
             }
-            .formStyle(.grouped)
-            
-            Button {
-                print("submit rapport")
-                dismiss()
-            } label: {
-                Text("Envoyer évalutation")
+            .navigationTitle("Rapport \(report.hotHouseId)")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                                Button("Envoyer") {
+                                    showThankYouAlert = true
+                                }
+                                .disabled(userRating == 0)
+                            }
             }
-            .disabled(false)
-            .buttonStyle(.borderedProminent)
-            .shadow(radius: 0.5, y:0.5)
-            .padding(20)
-
+            .alert("Votre IA s'améliore 🚀", isPresented: $showThankYouAlert) {
+                        Button("Fermer") {
+                            dismiss()
+                        }
+                    } message: {
+                        Text("Merci pour ces données !").multilineTextAlignment(.center)
+                    }
+            .task {
+                vm.getHotHouseById(id: report.hotHouseId)
+            }
         }
-        .task {
-            vm.getHotHouseById(id: report.hotHouseId)
-        }
-        .navigationBarTitleDisplayMode(.inline)
+        
     }
     
     private func convertTimeStampToString(date: Date) -> String {
         date.formatted(date: .omitted, time: .shortened)
     }
 }
-

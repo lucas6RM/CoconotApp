@@ -122,7 +122,7 @@ extension ApiService {
         return try await get("/hothouses/with-predictions")
     }
     
-    func getAllHotHousesDailyReport(date: Date = .now) async throws -> [DailyReportDto] {
+    func getAllHotHousesDailyReport(date: Date = .now) async throws -> [DailyReportResponseDto] {
         return try await get("/daily-reports")
     }
     

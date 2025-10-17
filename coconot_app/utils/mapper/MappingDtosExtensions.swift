@@ -59,10 +59,13 @@ extension HotHouseWithPredictionDto {
 }
 
 
-extension DailyReportDto {
+extension DailyReportResponseDto {
     func toModel() -> DailyReportModel {
         DailyReportModel(
+            id: id,
             hotHouseId: hotHouseId,
+            hotHouseName: hotHouseName,
+            isSubmitted: isSubmitted,
             temperatureMeasurements: temperatureMeasurements.map { $0.toModel() },
             humidityMeasurements: humidityMeasurements.map { $0.toModel() },
             openedWindowsDurations: openedWindowsDurations.map { $0.toModel(hotHouseId: hotHouseId) },
