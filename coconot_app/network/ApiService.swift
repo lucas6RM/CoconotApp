@@ -7,8 +7,6 @@
 
 import Foundation
 
-import Foundation
-
 enum APIError: Error {
     case invalidURL
     case transport(Error)
@@ -18,7 +16,7 @@ enum APIError: Error {
 
 class ApiService {
     private let session: URLSession
-    private let baseURL: URL? = URL(string: "https://reqbin.com")
+    private let baseURL: URL? = URL(string: "https://coconot-backend-production.up.railway.app/api/v1")
 
     init(session: URLSession = .shared) {
         self.session = session
@@ -69,100 +67,86 @@ class ApiService {
             throw APIError.decoding(error)
         }
     }
+    
+    func patch<T: Decodable, B: Encodable>(
+            _ path: String,
+            body: B,
+            encoder: JSONEncoder = JSONEncoder(),
+            decoder: JSONDecoder = JSONDecoder()
+        ) async throws -> T {
+            let url = try makeURL(path: path)
+            var request = URLRequest(url: url)
+            request.httpMethod = "PATCH"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try encoder.encode(body)
+            return try await run(request, decoder: decoder)
+        }
+        
+        /// Version PATCH sans retour de données
+        func patch<B: Encodable>(
+            _ path: String,
+            body: B,
+            encoder: JSONEncoder = JSONEncoder()
+        ) async throws {
+            let _: EmptyResponse = try await patch(path, body: body, encoder: encoder, decoder: JSONDecoder())
+        }
+    
+    /// DELETE générique avec retour décodable
+    func delete<T: Decodable>(_ path: String, decoder: JSONDecoder = JSONDecoder()) async throws -> T {
+        let url = try makeURL(path: path)
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        return try await run(request, decoder: decoder)
+    }
+    
+    /// DELETE générique sans retour (EmptyResponse)
+    func delete(_ path: String) async throws {
+        let _: EmptyResponse = try await delete(path, decoder: JSONDecoder())
+    }
 
     private func makeURL(path: String) throws -> URL {
-        if let baseURL {
-            guard let url = URL(string: path, relativeTo: baseURL) else { throw APIError.invalidURL }
+        guard let baseURL else { throw APIError.invalidURL }
+            guard let url = URL(string: baseURL.absoluteString + path) else { throw APIError.invalidURL }
             return url
-        } else {
-            guard let url = URL(string: path) else { throw APIError.invalidURL }
-            return url
-        }
     }
+    
+    /// Helper struct vide pour patch sans retour
+    struct EmptyResponse: Decodable {}
 }
 
 
 extension ApiService {
     
-    func getAllHotHousesWithPrediction() async throws -> [HotHouseWithPredictionDto] {
-        try await get("/hothouses/predictions")
+    
+    func getAllHotHousesWithPredictions() async throws -> [HotHouseWithPredictionDto] {
+        return try await get("/hothouses/with-predictions")
     }
     
-    func getGitHubTestApi() async throws -> String {
-        let test : String = try await get("/jokes/random")
-        print(test)
-        debugPrint("erreur")
-        return test
+    func getAllHotHousesDailyReport(date: Date = .now) async throws -> [DailyReportDto] {
+        return try await get("/daily-reports")
     }
     
-    func getRandomChuckJoke() async throws -> ChuckNorrisJoke {
-        // Pas besoin de keyDecodingStrategy car on a CodingKeys
-        try await get("/jokes/random")
+    func addHumidity(dto: HumidityMeasureDto) async throws {
+        let _ : HumidityMeasureResponseDto = try await post("/humidity-measures", body: dto)
     }
+    
+    func addTemperature(dto: TemperatureMeasureDto) async throws {
+        let _ : TemperatureMeasureResponseDto = try await post("/temperature-measures", body: dto)
+    }
+    
+    func addOpenings(dto: OpenedWindowsDurationDto) async throws {
+        let _ : OpenedWindowsDurationDto = try await post("/opening-measures", body: dto)
+    }
+    
+    func getHotHouseById(id: String) async throws -> HotHouseDto {
+        return try await get("/hothouses/\(id)")
+    }
+    
+    func getAllHotHouses() async throws -> [HotHouseDto] {
+        return try await get("/hothouses")
+    }
+    
+    
     
     
 }
-
-
-
-/* old version
- class ApiService {
-
-     // If your endpoint returns an array of HotHouseWithPredictionsDto
-     func getAllHotHousesWithPredictions() async throws -> [HotHouseWithPredictionDto] {
-         // Replace with your real endpoint URL
-         let url = URL(string: "https://api.example.com/hot-houses/predictions")!
-         let (data, _) = try await URLSession.shared.data(from: url)
-         return try JSONDecoder.backendDefault().decode([HotHouseWithPredictionDto].self, from: data)
-     }
-
-     // If your endpoint returns a wrapper object:
-     // func getAllHotHousesWithPredictions() async throws -> [HotHouseWithPredictionDto] {
-     //     let url = URL(string: "https://api.example.com/hot-houses/predictions")!
-     //     let (data, _) = try await URLSession.shared.data(from: url)
-     //     let wrapper = try JSONDecoder.backendDefault().decode(HotHousesWithPredictionsResponseDto.self, from: data)
-     //     return wrapper.items
-     // }
- }
-
- */
-
-
-
-
-
-
-/// sample
-/*
- struct HotHousePrediction: Decodable {
-     let probability: Double
-     let label: String
- }
-
- struct HotHouse: Decodable {
-     let id: String
-     let name: String
-     let location: String
-     let prediction: HotHousePrediction?
- }
-
- extension ApiService {
-     func getAllHotHousesWithPrediction() async throws -> [HotHouse] {
-         try await get("/hothouses/predictions")
-     }
- }
-
- // Calling it
- let api = ApiService(baseURL: "https://api.yourdomain.com")
-
- Task {
-     do {
-         let hotHouses = try await api.getAllHotHousesWithPrediction()
-         print("Loaded:", hotHouses.count)
-     } catch let error as APIError {
-         print("API error:", error)
-     } catch {
-         print("Unexpected error:", error)
-     }
- }
- */

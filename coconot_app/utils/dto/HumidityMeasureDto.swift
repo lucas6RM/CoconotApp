@@ -12,7 +12,12 @@ struct HumidityMeasureDto: Codable, Hashable {
     let hotHouseId: String
     let humidityMeasuredInsideHotHouse : Double
     let humidityFromWeather : Double
+}
+
+
+struct HumidityMeasureResponseDto: Codable, Hashable {
+    let hotHouseId: String
+    let humidityMeasuredInsideHotHouse : Double
+    let humidityFromWeather : Double
     let timestamp : Date
-    
-    
 }

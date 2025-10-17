@@ -52,7 +52,6 @@ struct SettingsView: View {
             }.preferredColorScheme(isDarkMode ? .dark : .light)
             
             Button("Modifier"){
-                
                 defaultUserNameValue = userName
                 dismiss()
             }

@@ -26,12 +26,16 @@ struct HomeView: View {
     
     
     var body: some View {
+        
+            
         NavigationStack {
+            ScrollView {
+                
             VStack {
                 ForEach(vm.hotHousesWithPredictionsList, id: \.hotHouse.id){ hotHouseWithPrediction in
                     CardHomeComponent(
                         hotHouse: hotHouseWithPrediction.hotHouse,
-                        predictions:hotHouseWithPrediction.predictionsOfTheDay.openedWindowsDurationsPredicted,
+                        predictions:hotHouseWithPrediction.predictionsOfTheDay?.openedWindowsDurationsPredicted ?? [],
                         // Dans tes callbacks:
                         onClickTemperature: { hotHouse, weatherData in
                             presentedSheet = .temperature(hotHouse, weatherData)
@@ -44,13 +48,7 @@ struct HomeView: View {
                         })
                     .padding(.horizontal)
                 }
-                /*Button("Test api") {
-                    //vm.testAPI()
-                    //vm.testApiGeneric()
-                    Task {
-                        await vm.testReqBinDirect()
-                    }
-                }*/
+                
                 Spacer()
             }
             .toolbar {
@@ -59,19 +57,19 @@ struct HomeView: View {
                         .font(.headline)
                 }
                 ToolbarItem (placement: .topBarTrailing){
-                        Button("Settings", systemImage: "gearshape", action: {
-                            isSettingsShowed = true
-                        })
+                    Button("Settings", systemImage: "gearshape", action: {
+                        isSettingsShowed = true
+                    })
                 }
             }
             .sheet(
                 isPresented: $isSettingsShowed,
                 onDismiss: {
                     isSettingsShowed = false
-            },
-            content: {
-                SettingsView()
-            })
+                },
+                content: {
+                    SettingsView()
+                })
             // Une seule sheet:
             .sheet(item: $presentedSheet, onDismiss: {
                 presentedSheet = nil
@@ -85,7 +83,11 @@ struct HomeView: View {
                     AddOpeningsRecordView(hotHouse: h, weatherManager: w)
                 }
             }
+        }.task {
+            vm.fetchAllHotHouses()
         }
+    }
+    
     }
     
     enum PresentedSheet: Identifiable {

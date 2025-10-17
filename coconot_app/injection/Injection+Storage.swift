@@ -40,19 +40,15 @@ extension Container {
     var hotHouseViewModel: Factory<HotHouseView.ViewModel> {
         self {
             @MainActor in
-            HotHouseView.ViewModel(
-                
-            )
+            HotHouseView.ViewModel(globalRepository: self.globalRepository())
         }
     }
     
     @MainActor
-    var dailyReportViewModel: Factory<DailyReportView.ViewModel> {
+    var dailyReportViewModel: Factory<AllDailyReportView.ViewModel> {
         self {
             @MainActor in
-            DailyReportView.ViewModel(
-                
-            )
+            AllDailyReportView.ViewModel(globalRepository: self.globalRepository())
         }
     }
     

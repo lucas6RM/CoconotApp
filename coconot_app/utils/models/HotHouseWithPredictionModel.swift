@@ -8,5 +8,5 @@
 
 struct HotHouseWithPredictionModel {
     let hotHouse: HotHouseModel
-    let predictionsOfTheDay: PredictionModel
+    let predictionsOfTheDay: PredictionModel?
 }

@@ -21,9 +21,9 @@ struct HotHouseDto: Codable, Hashable {
         case name
         case address
         case location
-        case temperatureThresholdMax = "temperature_threshold_max"
-        case temperatureThresholdMin = "temperature_threshold_min"
-        case humidityThresholdMax = "humidity_threshold_max"
-        case humidityThresholdMin = "humidity_threshold_min"
+        case temperatureThresholdMax
+        case temperatureThresholdMin
+        case humidityThresholdMax
+        case humidityThresholdMin
     }
 }

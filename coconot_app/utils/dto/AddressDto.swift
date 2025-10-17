@@ -11,9 +11,9 @@ struct AddressDto: Codable, Hashable {
     let postalCode: String
     let city: String
 
-    enum CodingKeys: String, CodingKey {
-        case addressStreet = "address_street"
-        case postalCode = "postal_code"
-        case city
+    init(_ model: Address) {
+        self.addressStreet = model.addressStreet
+        self.postalCode = model.postalCode
+        self.city = model.city
     }
 }

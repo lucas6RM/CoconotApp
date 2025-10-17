@@ -16,7 +16,7 @@ struct SplashView: View {
         ZStack{
             Color(.green)
             VStack{
-                Text(String(localized: "Coconot App"))
+                Text(String(localized: "SerrIA"))
                     .font(.largeTitle)
                     .fontWeight(.heavy)
                     .foregroundStyle(.white)

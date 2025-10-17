@@ -5,14 +5,12 @@
 //  Created by lucas mercier on 16/10/2025.
 //
 
-
-struct LocalisationGpsDto: Codable, Hashable {
+struct LocalisationGpsDto : Codable, Hashable {
     let latitude: Double
     let longitude: Double
 
-    enum CodingKeys: String, CodingKey {
-        case latitude
-        case longitude
+    init(_ model: LocalisationGps) {
+        self.latitude = model.latitude
+        self.longitude = model.longitude
     }
-    
 }

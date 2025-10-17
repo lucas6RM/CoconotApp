@@ -21,7 +21,7 @@ class RecordsViewModel{
                 do {
                     // Ici tu pourrais appeler l'API via globalRepository
                     print("Envoi DTO humidité : \(dto)")
-                    // Exemple : await globalRepository.addHumidity(dto)
+                    try await globalRepository.addHumidity(dto: dto)
                 } catch {
                     print("Erreur lors de l'enregistrement de l'humidité : \(error)")
                 }

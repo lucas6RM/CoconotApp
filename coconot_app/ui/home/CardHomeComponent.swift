@@ -19,99 +19,95 @@ struct CardHomeComponent: View {
     let onClickHumidity: (HotHouseModel, WeatherManager) -> ()
     let onClickOpenedWindow: (HotHouseModel, WeatherManager) -> ()
     
-
+    
     var body: some View {
         
         VStack(alignment: .leading, spacing: 12) {
             // Header avec le nom et température
-                VStack{
-                    HStack(alignment: .top, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(hotHouse.name)
-                                .font(.title2).fontWeight(.semibold)
-                                .foregroundStyle(.primary)
-                            
-                            // Ville en sous-titre
-                            if let city = hotHouse.address?.city {
-                                HStack(spacing: 6) {
-                                    Text(city)
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                        .lineLimit(1)
-                                        .truncationMode(.tail)
-                                }
+            VStack(spacing: 0) {
+                HStack(alignment: .top, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(hotHouse.name)
+                            .font(.title2).fontWeight(.semibold)
+                            .foregroundStyle(.primary)
+                        
+                        // Ville en sous-titre
+                        if let city = hotHouse.address?.city {
+                            HStack(spacing: 6) {
+                                Text(city)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
                             }
                         }
-
-                        Spacer()
-                        VStack(alignment: .trailing,spacing: 20, content: {
-                            Image(systemName:weatherManager.icon)
-                                .symbolRenderingMode(.multicolor)
-                                    
-                                .font(.system(size: 34, weight: .semibold))
-                                .frame(width: 44, height: 44)
-                            
-                            HStack(spacing: 20) {
-                
-                                Label {
-                                    Text(weatherManager.temperature)
-                                        .font(.subheadline)
-                                } icon: {
-                                    Image(systemName: "thermometer.medium")
-                                }
-                                .labelStyle(.titleAndIcon)
-                                .foregroundStyle(.red)
-
-                                Label {
-                                    Text(weatherManager.humidity)
-                                        .font(.subheadline)
-                                } icon: {
-                                    Image(systemName: "humidity")
-                                }
-                                .labelStyle(.titleAndIcon)
-                                .foregroundStyle(.blue)
-                                
-                                
-                            }
-                            
-                        }).padding(.bottom,20)
-                            
-                            
-                            
-                        
-            
                     }
                     
-                    
-                    HStack {
-                        VStack(alignment: .trailing ,spacing: 20){
+                    Spacer()
+                    VStack(alignment: .trailing,spacing: 20, content: {
+                        Image(systemName:weatherManager.icon)
+                            .symbolRenderingMode(.multicolor)
+                        
+                            .font(.system(size: 34, weight: .semibold))
+                            .frame(width: 44, height: 44)
+                        
+                        HStack(spacing: 20) {
                             
-                            ForEach(predictions) { prediction in
-                                HStack {
-                                    VStack(spacing: 4) {
-                                        Image(systemName: "window.casement")
-                                    }
-                                    Text("\(prediction.openWindowTime) - \(prediction.closeWindowTime)")
-                                        .font(.subheadline)
-                                    Spacer()
-                                }
+                            Label {
+                                Text(weatherManager.temperature)
+                                    .font(.subheadline)
+                            } icon: {
+                                Image(systemName: "thermometer.medium")
                             }
+                            .labelStyle(.titleAndIcon)
+                            .foregroundStyle(.red)
+                            
+                            Label {
+                                Text(weatherManager.humidity)
+                                    .font(.subheadline)
+                            } icon: {
+                                Image(systemName: "humidity")
+                            }
+                            .labelStyle(.titleAndIcon)
+                            .foregroundStyle(.blue)
+                            
+                            
                         }
                         
-                        makeMenu()
-                    }
-                }.onAppear {
-                    Task {
-                        await weatherManager.getWeather(location: hotHouse.location)
-                    }
+                    }).padding(.bottom,20)
+                    
                 }
                 
+                HStack {
+                    VStack(alignment: .trailing ,spacing: 20){
+                        
+                        ForEach(predictions) { prediction in
+                            HStack {
+                                VStack(spacing: 4) {
+                                    Image(systemName: "window.casement")
+                                }
+                                Text("\(prediction.openWindowTime) - \(prediction.closeWindowTime)")
+                                    .font(.subheadline)
+                                Spacer()
+                            }
+                        }
+                    }.frame(width: 150)
+                    Spacer()
+                    
+                    makeMenu().frame(width: 150, height: 120)
+                }
+            }.task {
+                if let loc = hotHouse.location {
+                    await weatherManager.getWeather(location: loc)
+                }
             }
             
+        }
+        
         
         .padding()
         .background(Color(.systemGray6))
-    
+        
         .cornerRadius(16)
         .shadow(radius: 1, x: 1, y: 1)
     }
@@ -123,13 +119,13 @@ struct CardHomeComponent: View {
             } label: {
                 Label("Température", systemImage: "thermometer")
             }
-
+            
             Button {
                 onClickHumidity(hotHouse, weatherManager)
             } label: {
                 Label("Humidité", systemImage: "drop")
             }
-
+            
             Button {
                 onClickOpenedWindow(hotHouse, weatherManager)
             } label: {
@@ -137,7 +133,7 @@ struct CardHomeComponent: View {
             }
         } label: {
             Text("Enregistrer données").padding(20)
-                
+            
         }
         .buttonStyle(.bordered)
         .tint(.mint)

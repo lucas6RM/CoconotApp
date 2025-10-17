@@ -10,8 +10,5 @@ struct PredictionDto: Codable, Hashable {
     let hotHouseId: String
     let openedWindowsDurationsPredicted: [OpenedWindowsDurationDto]
 
-    enum CodingKeys: String, CodingKey {
-        case hotHouseId = "hot_house_id"
-        case openedWindowsDurationsPredicted = "opened_windows_durations_predicted"
-    }
+    
 }

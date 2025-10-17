@@ -12,5 +12,11 @@ struct TemperatureMeasureDto: Codable, Hashable {
     let hotHouseId: String
     let temperatureMeasuredInsideHotHouse : Double
     let temperatureFromWeather : Double
+}
+
+struct TemperatureMeasureResponseDto: Codable, Hashable {
+    let hotHouseId: String
+    let temperatureMeasuredInsideHotHouse : Double
+    let temperatureFromWeather : Double
     let timestamp : Date
 }

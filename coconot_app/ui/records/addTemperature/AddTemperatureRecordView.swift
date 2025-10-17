@@ -114,7 +114,6 @@ struct AddTemperatureRecordView: View {
                 hotHouseId: hotHouse.id,
                 temperatureMeasuredInsideHotHouse: Double(selectedTemperature),
                 temperatureFromWeather: weatherTemp,
-                timestamp: Date()
             )
             
             vm.addTemperatureRecord(dto: dto)

@@ -9,18 +9,29 @@ import Foundation
 
 struct HotHouseModel {
     let id: String
-    let name: String
+    var name: String
     var address: Address? = nil
-    let location: LocalisationGps
-    let temperatureThresholdMax: Double
-    let temperatureThresholdMin: Double
-    let humidityThresholdMax: Double
-    let humidityThresholdMin: Double
+    var location: LocalisationGps? = nil
+    var temperatureThresholdMax: Double
+    var temperatureThresholdMin: Double
+    var humidityThresholdMax: Double
+    var humidityThresholdMin: Double
 }
 
-
-
-
+extension HotHouseModel {
+    static func empty() -> HotHouseModel {
+        .init(
+            id: UUID().uuidString,
+            name: "",
+            address: Address(addressStreet: "", postalCode: "", city: ""),
+            location: nil,
+            temperatureThresholdMax: 0,
+            temperatureThresholdMin: 0,
+            humidityThresholdMax: 0,
+            humidityThresholdMin: 0
+        )
+    }
+}
 
 
 

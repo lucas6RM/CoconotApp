@@ -31,7 +31,7 @@ struct ContentView: View {
                 }
                 .tag(TabSelection.hothouse)
             
-            DailyReportView()
+            AllDailyReportView()
                 .tabItem {
                     Label("Rapports", systemImage: "chart.line.text.clipboard")
                 }

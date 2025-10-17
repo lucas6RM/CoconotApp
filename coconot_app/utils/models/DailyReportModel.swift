@@ -9,12 +9,13 @@ import Foundation
 
 
 
-struct DailyReportModel {
+struct DailyReportModel : Identifiable {
+    let id = UUID()
     let hotHouseId : String
     let temperatureMeasurements : [TemperatureMeasureModel]
     let humidityMeasurements : [HumidityMeasureModel]
     let openedWindowsDurations : [OpenedWindowsDurationModel]
-    let rateOfTheDay : Int
+    let rateOfTheDay : Int?
     let date : Date
     let predictionOfTheDay : PredictionModel
 }

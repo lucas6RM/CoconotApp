@@ -117,7 +117,6 @@ struct AddHumidityRecordView: View {
                 hotHouseId: hotHouse.id,
                 humidityMeasuredInsideHotHouse: Double(selectedHumidity),
                 humidityFromWeather: weatherHumidity,
-                timestamp: Date()
             )
             
             // Appel ViewModel
