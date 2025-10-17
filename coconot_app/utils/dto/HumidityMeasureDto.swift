@@ -1,19 +1,18 @@
 //
-//  HumidityMeasureModel.swift
+//  HumidityMeasureDto.swift
 //  coconot_app
 //
-//  Created by lucas mercier on 16/10/2025.
+//  Created by lucas mercier on 17/10/2025.
 //
 
 import Foundation
 
 
-struct HumidityMeasureModel : Identifiable {
-    let id = UUID()
+struct HumidityMeasureDto: Codable, Hashable {
     let hotHouseId: String
     let humidityMeasuredInsideHotHouse : Double
     let humidityFromWeather : Double
     let timestamp : Date
+    
+    
 }
-
-

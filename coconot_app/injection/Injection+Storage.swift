@@ -55,4 +55,12 @@ extension Container {
             )
         }
     }
+    
+    @MainActor
+    var recordsViewModel: Factory<RecordsViewModel> {
+        self{
+            @MainActor in
+            RecordsViewModel(globalRepository: self.globalRepository())
+        }
+    }
 }

@@ -8,17 +8,6 @@
 import Foundation
 import Factory
 
-struct ChuckNorrisJoke: Decodable {
-    let iconUrl: String
-    let id: String
-    let url: String
-    let value: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case iconUrl = "icon_url" // explicite
-        case id, url, value       // direct
-    }
-}
 
 extension HomeView {
     
@@ -31,6 +20,41 @@ extension HomeView {
         init(globalRepository: GlobalRepository) {
             self.globalRepository = globalRepository
         }
+        
+        private(set) var hotHousesWithPredictionsList: [HotHouseWithPredictionModel] = [
+            HotHouseWithPredictionModel(
+                hotHouse: HotHouseModel(
+                    id: "1",
+                    name: "Serre tomates",
+                    address: Address(addressStreet: "", postalCode: "13000", city: "Marseille"),
+                    location: LocalisationGps(latitude: 43.300000, longitude: 5.400000),
+                    temperatureThresholdMax: 26.0,
+                    temperatureThresholdMin: 18.0,
+                    humidityThresholdMax: 50.0,
+                    humidityThresholdMin: 20.0
+                    
+                ),
+                predictionsOfTheDay: PredictionModel(hotHouseId: "1", openedWindowsDurationsPredicted: [
+                    OpenedWindowsDurationModel(hotHouseId:"1",openWindowTime: "8h00", closeWindowTime: "10h00"),
+                    OpenedWindowsDurationModel(hotHouseId:"1",openWindowTime: "14h00", closeWindowTime: "17h00")
+                ])),
+            HotHouseWithPredictionModel(
+                hotHouse: HotHouseModel(
+                    id: "2",
+                    name: "Serre champignons",
+                    address: Address(addressStreet: "", postalCode: "75000", city: "Paris"),
+                    location: LocalisationGps(latitude: 48.866667, longitude: 2.333333),
+                    temperatureThresholdMax: 26.0,
+                    temperatureThresholdMin: 18.0,
+                    humidityThresholdMax: 50.0,
+                    humidityThresholdMin: 20.0
+                ),
+                predictionsOfTheDay: PredictionModel(hotHouseId: "2", openedWindowsDurationsPredicted: [
+                    OpenedWindowsDurationModel(hotHouseId:"2",openWindowTime: "8h00", closeWindowTime: "10h00"),
+                    OpenedWindowsDurationModel(hotHouseId:"2",openWindowTime: "14h00", closeWindowTime: "17h00")
+                ]))
+        ]
+        
         
         
         func testAPI() {
@@ -110,4 +134,16 @@ struct Employee: Encodable {
 }
 struct EchoPayload: Encodable {
     let employee: Employee
+}
+
+struct ChuckNorrisJoke: Decodable {
+    let iconUrl: String
+    let id: String
+    let url: String
+    let value: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case iconUrl = "icon_url" // explicite
+        case id, url, value       // direct
+    }
 }

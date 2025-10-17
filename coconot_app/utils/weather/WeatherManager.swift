@@ -33,8 +33,8 @@ internal import _LocationEssentials
     }
 
     var icon: String {
-        guard let iconName = weather?.currentWeather.symbolName else { return "--" }
-        
+        guard var iconName = weather?.currentWeather.symbolName else { return "--" }
+        iconName += ".fill"
         return iconName
     }
     

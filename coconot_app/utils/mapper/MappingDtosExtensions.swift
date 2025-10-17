@@ -21,7 +21,7 @@ extension LocalisationGpsDto {
 
 extension OpenedWindowsDurationDto {
     func toModel() -> OpenedWindowsDurationModel {
-        OpenedWindowsDurationModel(openWindowTime: openWindowTime, closeWindowTime: closeWindowTime)
+        OpenedWindowsDurationModel(hotHouseId: hotHouseId, openWindowTime: openWindowTime, closeWindowTime: closeWindowTime)
     }
 }
 

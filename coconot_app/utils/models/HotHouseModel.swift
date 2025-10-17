@@ -10,7 +10,7 @@ import Foundation
 struct HotHouseModel {
     let id: String
     let name: String
-    let address: Address
+    var address: Address? = nil
     let location: LocalisationGps
     let temperatureThresholdMax: Double
     let temperatureThresholdMin: Double
