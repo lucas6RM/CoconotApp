@@ -81,8 +81,8 @@ struct AddOpeningsRecordView: View {
                     
                     VStack(spacing: 30) {
                         HStack {
-                            Image(systemName: "window.open")
-                                .foregroundStyle(.blue)
+                            Image(systemName: "window.casement")
+                                .foregroundStyle(.mint)
                             Text("Heure d’ouverture :")
                                 .font(.subheadline)
                             Spacer()
@@ -97,7 +97,7 @@ struct AddOpeningsRecordView: View {
                     
                     VStack(spacing: 30) {
                         HStack {
-                            Image(systemName: "window.close")
+                            Image(systemName: "window.casement.closed")
                                 .foregroundStyle(.red)
                             Text("Heure de fermeture :")
                                 .font(.subheadline)
