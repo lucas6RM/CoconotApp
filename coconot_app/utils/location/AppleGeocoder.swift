@@ -2,20 +2,26 @@
 
 import SwiftUI
 import CoreLocation
-
+import MapKit
 
 struct AppleGeocoder {
     static func geocode(address: String) async throws -> LocalisationGps {
-        let geocoder = CLGeocoder()
-        let placemarks = try await geocoder.geocodeAddressString(address)
-        
-        guard let location = placemarks.first?.location?.coordinate else {
-            throw NSError(domain: "No location found", code: 404)
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = address
+
+        let search = MKLocalSearch(request: request)
+        let response = try await search.start()
+
+        guard let mapItem = response.mapItems.first else {
+            throw NSError(domain: "AppleGeocoder", code: 404, userInfo: [NSLocalizedDescriptionKey: "No location found"])
         }
 
+        let location = mapItem.location
+        let coordinate = location.coordinate
         return LocalisationGps(
-            latitude: location.latitude,
-            longitude: location.longitude
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude
         )
     }
 }
+
