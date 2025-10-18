@@ -229,7 +229,7 @@ private extension AddEditHotHouseView {
             vm.addHotHouse(dto)
         } else {
             let dto = UpdateHotHouseDto(
-                id: house.id,
+                
                 name: house.name,
                 address: AddressDto(address),
                 location: LocalisationGpsDto(location),
@@ -238,7 +238,7 @@ private extension AddEditHotHouseView {
                 humidityThresholdMax: house.humidityThresholdMax,
                 humidityThresholdMin: house.humidityThresholdMin
             )
-            vm.editHotHouse(dto: dto)
+            vm.editHotHouse(dto: dto, hotHouseId: house.id)
         }
         dismiss()
         onDismiss()

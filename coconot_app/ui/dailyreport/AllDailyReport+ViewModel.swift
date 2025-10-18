@@ -15,6 +15,7 @@ extension AllDailyReportView {
         
         private(set) var currentHotHouse: HotHouseModel? = nil
         
+        
         // Fake data pour le preview / test
         private(set) var dailyReportsToday: [DailyReportModel] = [
             DailyReportModel(
@@ -89,6 +90,17 @@ extension AllDailyReportView {
                     self.currentHotHouse = nil
                 }
 
+            }
+            
+        }
+        
+        func submitRateToDailyReport(dto: SubmitRateDailyReportDto, reportId: String) {
+            Task {
+                do {
+                    try await globalRepository.submitRateDailyReportById(dto: dto, reportId: reportId)
+                } catch {
+                    print("Erreur lors de l'update du rapport' : \(error)")
+                }
             }
             
         }

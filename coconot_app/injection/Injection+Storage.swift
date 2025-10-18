@@ -59,4 +59,5 @@ extension Container {
             RecordsViewModel(globalRepository: self.globalRepository())
         }
     }
+    
 }

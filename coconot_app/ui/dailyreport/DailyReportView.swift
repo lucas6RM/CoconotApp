@@ -70,7 +70,7 @@ struct DailyReportView: View {
                             ForEach(1...5, id: \.self) { star in
                                 Image(systemName: star <= userRating ? "star.fill" : "star")
                                     .foregroundColor(.yellow)
-                                    .onTapGesture { userRating = star }
+                                    .onTapGesture { userRating = star }.disabled(report.isSubmitted)
                             }
                         }
                     }
@@ -85,9 +85,17 @@ struct DailyReportView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                                 Button("Envoyer") {
+                                    
+                                        vm.submitRateToDailyReport(
+                                            dto: SubmitRateDailyReportDto(
+                                                hotHouseId: report.hotHouseId,
+                                                isSubmitted: true,
+                                                rateOfTheDay: userRating
+                                            ), reportId: report.id)
+                                    
                                     showThankYouAlert = true
                                 }
-                                .disabled(userRating == 0)
+                                .disabled(userRating == 0 || report.isSubmitted)
                             }
             }
             .alert("Votre IA s'améliore 🚀", isPresented: $showThankYouAlert) {
@@ -99,6 +107,7 @@ struct DailyReportView: View {
                     }
             .task {
                 vm.getHotHouseById(id: report.hotHouseId)
+                self.userRating = report.rateOfTheDay ?? 0
             }
         }
         

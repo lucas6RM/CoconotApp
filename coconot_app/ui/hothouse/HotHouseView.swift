@@ -28,6 +28,9 @@ struct HotHouseView: View {
                                         .foregroundColor(.gray)
                                 }
                             }
+                        }.onDisappear {
+                            vm.getHotHouses()
+                            refreshId = UUID()
                         }
                     }
                 }.id(refreshId)
@@ -45,10 +48,12 @@ struct HotHouseView: View {
             }
             .sheet(isPresented: $isPresentedAddHotHouse) {
                 AddEditHotHouseView(selectedHotHouseId: selectedHotHouseId) {
+                    vm.getHotHouses()
                     isPresentedAddHotHouse = false
-                    Task{
-                        vm.getHotHouses()
-                    }
+                    
+                }.onDisappear {
+                    vm.getHotHouses()
+                    refreshId = UUID()
                 }
             }
         }

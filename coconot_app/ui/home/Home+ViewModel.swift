@@ -21,7 +21,9 @@ extension HomeView {
             self.globalRepository = globalRepository
         }
         
-        private(set) var hotHousesWithPredictionsList: [HotHouseWithPredictionModel] = [
+        private(set) var hotHousesWithPredictionsList: [HotHouseWithPredictionModel] = []
+        
+        /*[
             HotHouseWithPredictionModel(
                 hotHouse: HotHouseModel(
                     id: "1",
@@ -53,7 +55,7 @@ extension HomeView {
                     OpenedWindowsDurationModel(hotHouseId:"2",openWindowTime: "8h00", closeWindowTime: "10h00"),
                     OpenedWindowsDurationModel(hotHouseId:"2",openWindowTime: "14h00", closeWindowTime: "17h00")
                 ]))
-        ]
+        ]*/
         
         func fetchAllHotHouses(){
             Task {

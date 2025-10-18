@@ -52,7 +52,7 @@ struct AllDailyReportView: View {
             }
             .navigationTitle("Rapports du jour")
             .task {
-                // await vm.fetchDailyReports()
+                vm.getAllDailyReportsOfToday()
             }
         }
     }

@@ -46,10 +46,10 @@ extension HotHouseView {
             }
         }
 
-        func editHotHouse(dto: UpdateHotHouseDto) {
+        func editHotHouse(dto: UpdateHotHouseDto, hotHouseId: String) {
             Task{
                 do {
-                    try await globalRepository.updateHotHouse(dto: dto)
+                    try await globalRepository.updateHotHouse(dto: dto, hotHouseId: hotHouseId)
                     getHotHouses()
                 } catch {
                     print("Erreur editHotHouse:", error)

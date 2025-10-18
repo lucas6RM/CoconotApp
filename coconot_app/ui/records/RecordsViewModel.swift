@@ -19,7 +19,6 @@ class RecordsViewModel{
     func addHumidityRecord(dto: HumidityMeasureDto) {
             Task {
                 do {
-                    // Ici tu pourrais appeler l'API via globalRepository
                     print("Envoi DTO humidité : \(dto)")
                     try await globalRepository.addHumidity(dto: dto)
                 } catch {
@@ -32,7 +31,7 @@ class RecordsViewModel{
         Task {
             do {
                 print("Envoi DTO température : \(dto)")
-                // Ici, appel API ou stockage local via globalRepository
+                try await globalRepository.addTemperature(dto: dto)
             } catch {
                 print("Erreur lors de l'enregistrement de la température : \(error)")
             }
@@ -44,7 +43,7 @@ class RecordsViewModel{
             Task {
                 do {
                     print("Envoi DTO ouverture fenêtres : \(dto)")
-                    // Ici, appel API ou stockage local via globalRepository
+                    try await globalRepository.addOpenings(dto: dto)
                 } catch {
                     print("Erreur lors de l'enregistrement des ouvertures : \(error)")
                 }

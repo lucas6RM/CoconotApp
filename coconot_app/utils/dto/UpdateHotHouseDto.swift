@@ -6,9 +6,7 @@
 //
 
 
-
 struct UpdateHotHouseDto: Codable, Hashable {
-    let id: String
     let name: String?
     let address: AddressDto?
     let location: LocalisationGpsDto?

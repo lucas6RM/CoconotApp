@@ -26,15 +26,16 @@ class GlobalRepository {
         }
     }
     
-    func getAllDailyReportForToday(date : Date = .now) async throws -> [DailyReportModel] {
-        let dailyReportsDto = try await apiService.getAllHotHousesDailyReport()
-        return dailyReportsDto.map { item in
-            item.toModel()
-        }
-    }
-    
     func addHumidity(dto : HumidityMeasureDto) async throws {
         try await apiService.addHumidity(dto: dto)
+    }
+    
+    func addTemperature(dto: TemperatureMeasureDto) async throws {
+        try await apiService.addTemperature(dto: dto)
+    }
+    
+    func addOpenings(dto: OpenedWindowsDurationDto) async throws {
+        try await apiService.addOpenings(dto: dto)
     }
     
     func getHotHouseById(id: String) async throws -> HotHouseModel {
@@ -54,13 +55,24 @@ class GlobalRepository {
         
     }
     
-    func updateHotHouse(dto: UpdateHotHouseDto) async throws {
-        let _ : HotHouseDto = try await apiService.post("/hothouses/\(dto.id)", body: dto)
+    func updateHotHouse(dto: UpdateHotHouseDto, hotHouseId: String) async throws {
+        let _ : HotHouseDto = try await apiService.patch("/hothouses/\(hotHouseId)", body: dto)
     }
     
     func deleteHotHouseById(id: String) async throws {
         try await apiService.delete("/hothouses/\(id)")
     }
     
+    func getAllDailyReportForToday(date : Date = .now) async throws -> [DailyReportModel] {
+        let dailyReportsDto = try await apiService.getAllHotHousesDailyReport(date: date)
+        print ("rapports du jour : \(dailyReportsDto)")
+        return dailyReportsDto.map { item in
+            item.toModel()
+        }
+    }
+    
+    func submitRateDailyReportById(dto: SubmitRateDailyReportDto, reportId: String) async throws {
+        try await apiService.patch("/daily-reports/\(reportId)", body: dto)
+    }
 }
     

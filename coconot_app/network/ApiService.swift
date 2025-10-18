@@ -17,6 +17,101 @@ enum APIError: Error {
 class ApiService {
     private let session: URLSession
     private let baseURL: URL? = URL(string: "https://coconot-backend-production.up.railway.app/api/v1")
+    private let defaultDecoder: JSONDecoder
+
+    init(session: URLSession = .shared) {
+        self.session = session
+        self.defaultDecoder = JSONDecoder()
+        self.defaultDecoder.dateDecodingStrategy = .iso8601
+    }
+
+    // Generic GET
+    func get<T: Decodable>(_ path: String, decoder: JSONDecoder? = nil) async throws -> T {
+        let url = try makeURL(path: path)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        return try await run(request, decoder: decoder ?? defaultDecoder)
+    }
+
+    // Generic POST
+    func post<T: Decodable, B: Encodable>(
+        _ path: String,
+        body: B,
+        encoder: JSONEncoder = JSONEncoder(),
+        decoder: JSONDecoder? = nil
+    ) async throws -> T {
+        let url = try makeURL(path: path)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try encoder.encode(body)
+        return try await run(request, decoder: decoder ?? defaultDecoder)
+    }
+
+    // PATCH
+    func patch<T: Decodable, B: Encodable>(
+        _ path: String,
+        body: B,
+        encoder: JSONEncoder = JSONEncoder(),
+        decoder: JSONDecoder? = nil
+    ) async throws -> T {
+        let url = try makeURL(path: path)
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try encoder.encode(body)
+        return try await run(request, decoder: decoder ?? defaultDecoder)
+    }
+
+    func patch<B: Encodable>(_ path: String, body: B, encoder: JSONEncoder = JSONEncoder()) async throws {
+        let _: EmptyResponse = try await patch(path, body: body, encoder: encoder, decoder: defaultDecoder)
+    }
+
+    func delete<T: Decodable>(_ path: String, decoder: JSONDecoder? = nil) async throws -> T {
+        let url = try makeURL(path: path)
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        return try await run(request, decoder: decoder ?? defaultDecoder)
+    }
+
+    func delete(_ path: String) async throws {
+        let _: EmptyResponse = try await delete(path, decoder: defaultDecoder)
+    }
+
+    private func run<T: Decodable>(_ request: URLRequest, decoder: JSONDecoder) async throws -> T {
+        let (data, response): (Data, URLResponse)
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            throw APIError.transport(error)
+        }
+
+        guard let http = response as? HTTPURLResponse else {
+            throw APIError.badStatus(-1)
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            throw APIError.badStatus(http.statusCode)
+        }
+
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch {
+            throw APIError.decoding(error)
+        }
+    }
+
+    private func makeURL(path: String) throws -> URL {
+        guard let baseURL else { throw APIError.invalidURL }
+        guard let url = URL(string: baseURL.absoluteString + path) else { throw APIError.invalidURL }
+        return url
+    }
+
+    struct EmptyResponse: Decodable {}
+}
+/*
+class ApiService {
+    private let session: URLSession
+    private let baseURL: URL? = URL(string: "https://coconot-backend-production.up.railway.app/api/v1")
 
     init(session: URLSession = .shared) {
         self.session = session
@@ -113,7 +208,7 @@ class ApiService {
     /// Helper struct vide pour patch sans retour
     struct EmptyResponse: Decodable {}
 }
-
+*/
 
 extension ApiService {
     
@@ -123,7 +218,7 @@ extension ApiService {
     }
     
     func getAllHotHousesDailyReport(date: Date = .now) async throws -> [DailyReportResponseDto] {
-        return try await get("/daily-reports")
+        return try await get("/daily-reports/date/\(date)")
     }
     
     func addHumidity(dto: HumidityMeasureDto) async throws {
